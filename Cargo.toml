@@ -1,0 +1,17 @@
+[package]
+name = "rust-playground"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+shape_3d = { path = "./shape_3d" }
+
+[workspace]
+
+members = [
+  "shape_1d",
+  "shape_2d",
+  "shape_3d"
+]
