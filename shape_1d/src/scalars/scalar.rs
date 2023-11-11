@@ -64,7 +64,7 @@ mod tests {
    * get_mut_value to test mutability of variables
    */
   #[test]
-  fn scalar_get_mut_value_2() {
+  fn scalar_get_mut_value_1() {
     let mut five: Scalar<i32> = Scalar::new(5);
     let five_value: &mut i32 = five.get_mut_value();
 
@@ -77,7 +77,7 @@ mod tests {
    * Mutate get_mut_value variable
    */
   #[test]
-  fn scalar_get_mut_value_3() {
+  fn scalar_get_mut_value_2() {
     let mut five: Scalar<i32> = Scalar::new(5);
     let mut five_value: &mut i32 = five.get_mut_value();
 
@@ -92,7 +92,7 @@ mod tests {
    * Test mutability of get_mut_value
    */
   #[test]
-  fn scalar_get_mut_value_4() {
+  fn scalar_get_mut_value_3() {
     let mut five: Scalar<i32> = Scalar::new(5);
     let five_value: &mut i32 = five.get_mut_value();
 
@@ -115,11 +115,23 @@ mod tests {
    * Test deref of Scalar
    */
   #[test]
-  fn scalar_get_mut_value_5() {
+  fn scalar_deref_1() {
     let mut five: Scalar<i32> = Scalar::new(5);
     assert_eq!(*five, 5);
 
     *five = 10;
+    assert_eq!(*five, 10);
+  }
+
+  /*
+   * Test set_value
+   */
+  #[test]
+  fn scalar_set_value_1() {
+    let mut five : Scalar<i32> = Scalar::new(5);
+    assert_eq!(*five.get_value(), 5);
+
+    five.set_value(10);
     assert_eq!(*five, 10);
   }
 }
