@@ -1,137 +1,204 @@
-use std::ops::{Deref, DerefMut};
+use std::ops::{Add, Deref, DerefMut, Div, Mul, Sub};
 
 use crate::Shape1d;
 
-#[derive(Debug)]
-pub struct Scalar<T> {
-  magnitude : T
+#[derive(Debug, PartialEq, Copy, Clone)]
+pub struct Scalar<T>
+where
+    T: Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T> + Copy,
+{
+    magnitude: T,
 }
 
-impl<T> Scalar<T> {
-  pub fn new(magnitude : T) -> Self {
-    return Self {
-      magnitude
-    };
-  }
+impl<T> Scalar<T>
+where
+    T: Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T> + Copy,
+{
+    pub fn new(magnitude: T) -> Self {
+        return Self { magnitude };
+    }
+
+    pub fn mult(&self) -> T {
+        return *self.get_value() * *self.get_value();
+    }
 }
 
-impl<T> Shape1d<T> for Scalar<T> {
-  fn get_value(&self) -> &T {
-    return &self.magnitude;
-  }
+impl<T> Shape1d<T> for Scalar<T>
+where
+    T: Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T> + Copy,
+{
+    fn get_value(&self) -> &T {
+        return &self.magnitude;
+    }
 
-  fn get_mut_value(&mut self) -> &mut T {
-    return &mut self.magnitude;
-  }
+    fn get_mut_value(&mut self) -> &mut T {
+        return &mut self.magnitude;
+    }
 
-  fn set_value(&mut self, val : T) -> &Self {
-    self.magnitude = val;
-    return self;
-  }
+    fn set_value(&mut self, val: T) -> &Self {
+        self.magnitude = val;
+        return self;
+    }
 }
 
-impl<T> Deref for Scalar<T> { 
-  type Target = T;
-  
-  fn deref(&self) -> &Self::Target {
-      return self.get_value();
-  }
+impl<T> Add for Scalar<T>
+where
+    T: Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T> + Copy,
+{
+    type Output = Scalar<T>;
+    fn add(self, rhs: Self) -> Self::Output {
+        return Self::new(*self + *rhs);
+    }
 }
 
-impl<T> DerefMut for Scalar<T> {
-  fn deref_mut(&mut self) -> &mut Self::Target {
-      return self.get_mut_value();
-  }
+impl<T> Sub for Scalar<T>
+where
+    T: Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T> + Copy,
+{
+    type Output = Scalar<T>;
+    fn sub(self, rhs: Self) -> Self::Output {
+        return Self::new(*self - *rhs);
+    }
+}
+
+impl<T> Mul for Scalar<T>
+where
+    T: Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T> + Copy,
+{
+    type Output = Scalar<T>;
+    fn mul(self, rhs: Self) -> Self::Output {
+        return Self::new(*self * *rhs);
+    }
+}
+
+impl<T> Div for Scalar<T>
+where
+    T: Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T> + Copy,
+{
+    type Output = Scalar<T>;
+    fn div(self, rhs: Self) -> Self::Output {
+        return Self::new(*self / *rhs);
+    }
+}
+
+impl<T> Deref for Scalar<T>
+where
+    T: Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T> + Copy,
+{
+    type Target = T;
+
+    fn deref(&self) -> &Self::Target {
+        return self.get_value();
+    }
+}
+
+impl<T> DerefMut for Scalar<T>
+where
+    T: Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T> + Copy,
+{
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        return self.get_mut_value();
+    }
 }
 
 #[cfg(test)]
 mod tests {
-  use crate::Shape1d;
-  use super::Scalar;
+    use super::{Scalar, Shape1d};
 
-  /* 
-   * Very basic get_value and compare
-   */
-  #[test]
-  fn scalar_get_value1() {
-    let five: Scalar<i32> = Scalar::new(5);
-    let five_value: &i32 = five.get_value();
-
-    assert_eq!(*five_value, 5);
-  }
-
-  /*
-   * get_mut_value to test mutability of variables
-   */
-  #[test]
-  fn scalar_get_mut_value_1() {
-    let mut five: Scalar<i32> = Scalar::new(5);
-    let five_value: &mut i32 = five.get_mut_value();
-
-    *five_value = 10;
-    assert_eq!(*five_value, 10);
-    assert_eq!(*five, 10);
-  }
-
-  /*
-   * Mutate get_mut_value variable
-   */
-  #[test]
-  fn scalar_get_mut_value_2() {
-    let mut five: Scalar<i32> = Scalar::new(5);
-    let mut five_value: &mut i32 = five.get_mut_value();
-
-    let mut binding = 10;
-    five_value = &mut binding;
-
-    assert_eq!(*five, 5);
-    assert_eq!(*five_value, 10);
-  }
-
-  /*
-   * Test mutability of get_mut_value
-   */
-  #[test]
-  fn scalar_get_mut_value_3() {
-    let mut five: Scalar<i32> = Scalar::new(5);
-    let five_value: &mut i32 = five.get_mut_value();
-
-    *five_value = 10;
-    assert_eq!(*five_value, 10);
-    assert_eq!(*five, 10);
-
-    let five_value_mut: &mut i32 = five.get_mut_value();
-    assert_eq!(*five_value_mut, 10);
-    /* 
-     Adding this will create two mutable references to `five` (`five_value` and `five_value_mut`)
-     assert_eq!(*five_value, 10); 
+    /*
+     * Very basic get_value and compare
      */
+    #[test]
+    fn scalar_get_value1() {
+        let five: Scalar<i32> = Scalar::new(5);
+        let five_value: &i32 = five.get_value();
 
-    *five.get_mut_value() = 15;
-    assert_eq!(*five, 15);
-  }
+        assert_eq!(*five_value, 5);
+    }
 
-  /*
-   * Test deref of Scalar
-   */
-  #[test]
-  fn scalar_deref_1() {
-    let mut five: Scalar<i32> = Scalar::new(5);
-    assert_eq!(*five, 5);
+    /*
+     * get_mut_value to test mutability of variables
+     */
+    #[test]
+    fn scalar_get_mut_value_1() {
+        let mut five: Scalar<i32> = Scalar::new(5);
+        let five_value: &mut i32 = five.get_mut_value();
 
-    *five = 10;
-    assert_eq!(*five, 10);
-  }
+        *five_value = 10;
+        assert_eq!(*five_value, 10);
+        assert_eq!(*five, 10);
+    }
 
-  /*
-   * Test set_value
-   */
-  #[test]
-  fn scalar_set_value_1() {
-    let mut five : Scalar<i32> = Scalar::new(5);
-    assert_eq!(*five.get_value(), 5);
+    /*
+     * Mutate get_mut_value variable
+     */
+    #[test]
+    fn scalar_get_mut_value_2() {
+        let mut five: Scalar<i32> = Scalar::new(5);
+        let mut five_value: &mut i32 = five.get_mut_value();
 
-    five.set_value(10);
-    assert_eq!(*five, 10);
-  }
+        let mut binding = 10;
+        five_value = &mut binding;
+
+        assert_eq!(*five, 5);
+        assert_eq!(*five_value, 10);
+    }
+
+    /*
+     * Test mutability of get_mut_value
+     */
+    #[test]
+    fn scalar_get_mut_value_3() {
+        let mut five: Scalar<i32> = Scalar::new(5);
+        let five_value: &mut i32 = five.get_mut_value();
+
+        *five_value = 10;
+        assert_eq!(*five_value, 10);
+        assert_eq!(*five, 10);
+
+        let five_value_mut: &mut i32 = five.get_mut_value();
+        assert_eq!(*five_value_mut, 10);
+        /*
+        Adding this will create two mutable references to `five` (`five_value` and `five_value_mut`)
+        assert_eq!(*five_value, 10);
+        */
+
+        *five.get_mut_value() = 15;
+        assert_eq!(*five, 15);
+    }
+
+    /*
+     * Test deref of Scalar
+     */
+    #[test]
+    fn scalar_deref_1() {
+        let mut five: Scalar<i32> = Scalar::new(5);
+        assert_eq!(*five, 5);
+
+        *five = 10;
+        assert_eq!(*five, 10);
+    }
+
+    /*
+     * Test set_value
+     */
+    #[test]
+    fn scalar_set_value_1() {
+        let mut five: Scalar<i32> = Scalar::new(5);
+        assert_eq!(*five.get_value(), 5);
+
+        five.set_value(10);
+        assert_eq!(*five, 10);
+    }
+
+    /*
+     * Test derived operation
+     */
+    #[test]
+    fn scalar_operation_1() {
+        let five = Scalar::new(5);
+        let ten = Scalar::new(10);
+
+        assert_eq!(five + ten, Scalar::new(15));
+    }
 }

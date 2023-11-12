@@ -1,17 +1,22 @@
-pub mod shapes;
-use shape_1d::{scalars::scalar::Scalar, Shape1d};
+// pub mod shapes;
+// use std::ops::{Sub, Add, Mul, Div};
 
-pub trait Shape2d <T> {
-    fn get_area(self) -> Scalar<T>;
-}
+// use shape_1d::{scalars::scalar::Scalar, Shape1d};
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+// pub trait Shape2d <T>
+// where
+//     T: Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T>,
+// {
+//     fn get_area(self) -> Scalar<T>;
+// }
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
+
+//     #[test]
+//     fn it_works() {
+//         let result = add(2, 2);
+//         assert_eq!(result, 4);
+//     }
+// }
