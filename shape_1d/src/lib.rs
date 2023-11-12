@@ -5,7 +5,8 @@ pub use scalars::scalar::Scalar;
 
 pub trait GenericTypeAlias<T> : Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T> + Copy {}
 
-pub trait Shape1d<T>
+pub trait Shape1d<T> where
+    T: Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T> + Copy,
 {
     fn get_value(&self) -> &T;
     fn set_value(&mut self, val: T) -> &Self;
