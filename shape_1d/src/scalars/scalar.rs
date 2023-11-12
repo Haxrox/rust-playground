@@ -101,6 +101,38 @@ where
     }
 }
 
+impl From<i32> for Scalar<i32>
+{
+    fn from(value: i32) -> Self {
+        return Self {
+            magnitude : value
+        };
+    }
+}
+
+impl Into<i32> for Scalar<i32> 
+{
+    fn into(self) -> i32 {
+        return self.magnitude;
+    }
+}
+
+impl From<i64> for Scalar<i64>
+{
+    fn from(value: i64) -> Self {
+        return Self {
+            magnitude : value
+        };
+    }
+}
+
+impl Into<i64> for Scalar<i64> 
+{
+    fn into(self) -> i64 {
+        return self.magnitude;
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::{Scalar, Shape1d};
@@ -200,5 +232,41 @@ mod tests {
         let ten = Scalar::new(10);
 
         assert_eq!(five + ten, Scalar::new(15));
+    }
+
+    /*
+     * Test From implementation
+     */
+    #[test]
+    fn scalar_from() {
+        let five: Scalar<i32> = Scalar::new(5);
+        
+        assert_eq!(five, 5.into());
+        /*
+         * Fails
+         * assert_eq!(5.into(), five);
+         */
+        assert_eq!(Scalar::from(5), five);
+        assert_eq!(five, Scalar::from(5));
+    }
+
+    /*
+     * Test Into implementation
+     */
+    #[test]
+    fn scalar_into() {
+        let five: Scalar<i32> = Scalar::new(5);
+        let five_i64 : Scalar<i64> = Scalar::new(5 as i64);
+        
+        assert_eq!(5, five.into());
+        // <Scalar<i32> as Into<T>>::into(`, `)`
+        assert_eq!(<Scalar<i32> as Into<i32>>::into(five), 5 as i32);
+        assert_eq!(<Scalar<i64> as Into<i64>>::into(five_i64), 5 as i64);
+        /*
+         * Fails
+         * assert_eq!(five.into(), 5);
+         */
+        // assert_eq!(five.into(), 5 as i32);
+
     }
 }
