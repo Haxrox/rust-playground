@@ -1,35 +1,58 @@
-// use crate::Shape2d;
-// use shape_1d::{scalars::scalar::Scalar, Shape1d};
+use std::ops::{Add, Sub, Mul, Div};
 
-// pub struct Rectangle<T = u32> {
-//     length : Scalar<T>,
-//     width : Scalar<T>
-// }
+use shape_1d::Scalar;
+use crate::Shape2d;
 
-// impl<T> Shape2d<T> for Rectangle<T> {
-//     fn get_area(self) -> Scalar<T> {
-//         return self.get_length() * self.get_width();
-//     }
-// } 
+pub struct Rectangle<T = u32> 
+where
+    T: Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T> + Copy,
+{
+    length : Scalar<T>,
+    width : Scalar<T>
+}
+
+impl<T> Shape2d<T> for Rectangle<T>
+where
+    T: Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T> + Copy,
+{
+    fn get_area(&self) -> Scalar<T> {
+        return *self.get_length() * *self.get_width();
+    }
+} 
 
 
-// impl<T> Rectangle<T> {
-//     fn get_length(self) -> Scalar<T> {
-//         return self.length;
-//     }
+impl<T> Rectangle<T> 
+where
+    T: Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T> + Copy,
+{
+    fn new(length : Scalar<T>, width : Scalar<T>) -> Self {
+        return Self {
+            length: length,
+            width: width
+        };
+    }
 
-//     fn get_width(self) -> Scalar<T> {
-//         return self.width;
-//     }
-// }
+    fn get_length(&self) -> &Scalar<T> {
+        return &self.length;
+    }
 
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
+    fn get_width(&self) -> &Scalar<T> {
+        return &self.width;
+    }
+}
 
-//     #[test]
-//     fn it_works() {
-//         let result = add(2, 2);
-//         assert_eq!(result, 4);
-//     }
-// }
+#[cfg(test)]
+mod tests {
+    use shape_1d::Scalar;
+    use crate::{shapes::rectangle::Rectangle, Shape2d};
+
+    #[test]
+    fn test_rectangle_properties() {
+        let rec_4x5 = Rectangle::new(Scalar::new(4), Scalar::new( 5));
+        
+        assert_eq!(*rec_4x5.get_length(), Scalar::new(4));
+        assert_eq!(*rec_4x5.get_width(), Scalar::new(5));
+
+        assert_eq!(rec_4x5.get_area(), Scalar::new(20));
+    }
+}
