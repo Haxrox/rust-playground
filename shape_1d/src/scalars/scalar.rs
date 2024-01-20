@@ -101,14 +101,14 @@ where
     }
 }
 
-impl From<i32> for Scalar<i32>
-{
-    fn from(value: i32) -> Self {
-        return Self {
-            magnitude : value
-        };
-    }
-}
+// impl From<i32> for Scalar<i32>
+// {
+//     fn from(value: i32) -> Self {
+//         return Self {
+//             magnitude : value
+//         };
+//     }
+// }
 
 impl Into<i32> for Scalar<i32> 
 {
@@ -117,19 +117,62 @@ impl Into<i32> for Scalar<i32>
     }
 }
 
-impl From<i64> for Scalar<i64>
-{
-    fn from(value: i64) -> Self {
-        return Self {
-            magnitude : value
-        };
-    }
-}
+// impl From<i64> for Scalar<i64>
+// {
+//     fn from(value: i64) -> Self {
+//         return Self {
+//             magnitude : value
+//         };
+//     }
+// }
 
 impl Into<i64> for Scalar<i64> 
 {
     fn into(self) -> i64 {
         return self.magnitude;
+    }
+}
+
+// impl From<f32> for Scalar<f32>
+// {
+//     fn from(value: f32) -> Self {
+//         return Self {
+//             magnitude : value
+//         };
+//     }
+// }
+
+impl Into<f32> for Scalar<f32> 
+{
+    fn into(self) -> f32 {
+        return self.magnitude as f32;
+    }
+}
+
+// impl From<f64> for Scalar<f64>
+// {
+//     fn from(value: f64) -> Self {
+//         return Self {
+//             magnitude : value
+//         };
+//     }
+// }
+
+impl Into<f64> for Scalar<f64> 
+{
+    fn into(self) -> f64 {
+        return self.magnitude as f64;
+    }
+}
+
+impl<T> From<T> for Scalar<T>
+where
+    T: Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Div<Output = T> + Copy,
+{
+    fn from(value: T) -> Self {
+        return Self {
+            magnitude : value
+        };
     }
 }
 
@@ -268,5 +311,28 @@ mod tests {
          */
         // assert_eq!(five.into(), 5 as i32);
 
+    }
+
+    /*
+     * Test T = f64
+     */
+    #[test]
+    fn scalar_f64() {
+        let five: Scalar<f64> = Scalar::new(5.0);
+        let ten: Scalar<f64> = Scalar::new(10.0);
+
+        assert_eq!(five + ten, Scalar::new(15.0));
+    }
+
+    /*
+     * Test PI
+     */
+    #[test]
+    fn scalar_pi() {
+        let pi: Scalar<f64> = Scalar::new(std::f64::consts::PI);
+        let ten: Scalar<i32> = Scalar::new(10);
+
+        assert_eq!(pi, Scalar::new(std::f64::consts::PI));
+        assert_eq!(pi * Scalar::from(ten), Scalar::new(std::f64::consts::PI));
     }
 }
