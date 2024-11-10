@@ -5,11 +5,6 @@ version = 3
 [[package]]
 name = "rust-playground"
 version = "0.1.0"
-dependencies = [
- "shape_1d",
- "shape_2d",
- "shape_3d",
-]
 
 [[package]]
 name = "shape_1d"
@@ -20,11 +15,4 @@ name = "shape_2d"
 version = "0.1.0"
 dependencies = [
  "shape_1d",
-]
-
-[[package]]
-name = "shape_3d"
-version = "0.1.0"
-dependencies = [
- "shape_2d",
 ]
