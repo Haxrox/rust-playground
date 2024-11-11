@@ -1,6 +1,6 @@
 [workspace]
 
-members = [
+members = [ "request-playground",
   "rust_playground",
   "shape_1d",
   "shape_2d",
